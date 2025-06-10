@@ -1,0 +1,61 @@
+import os
+import json
+
+import utils.utils as utils
+from fhir.codesystem import FHIRCodeSystem
+
+SOURCE_DATA_FILE_URL = "https://github.com/obophenotype/human-phenotype-ontology/releases/download/v2025-05-06/hp-full.json"
+SOURCE_CODESYSTEM_URL = "https://terminology.hl7.org/CodeSystem-HPO.json"
+LOCAL_DATA_DIR = "./data/hpo"
+LOCAL_DATA_FILE = f"{LOCAL_DATA_DIR}/source_data.json"
+LOCAL_CODESYSTEM_FILE = f"{LOCAL_DATA_DIR}/codesystem.json"
+
+class HPO:
+  def __init__(self):
+    """
+    Initialize the HPO class.
+    """
+    # Ensure the data directory exists
+    os.makedirs(LOCAL_DATA_DIR, exist_ok=True)
+
+  def load_data(self):
+    """
+    Load data from the HPO source and save it to a file.
+    """
+    print("Loading HPO data...")
+
+    if utils.is_file_fresh(LOCAL_DATA_FILE, 24):
+        return
+
+    utils.download_file(SOURCE_DATA_FILE_URL, LOCAL_DATA_FILE)
+
+  def process_data(self):
+    """
+    Process the HPO data and create FHIR CodeSystem concepts.
+    """
+    print("Processing HPO data")
+  
+    if not os.path.exists(LOCAL_DATA_FILE):
+      print("Data file does not exist. Please run the load_data function first.")
+      return
+
+    print(f"Creating FHIR CodeSystem for HPO from {SOURCE_CODESYSTEM_URL}...")
+    hpoCS = FHIRCodeSystem()
+    hpoCS.fetch_cs(url=SOURCE_CODESYSTEM_URL)
+ 
+    data = {}
+    print(f"Processing data from {LOCAL_DATA_FILE}...")
+    with open(LOCAL_DATA_FILE, 'r') as file:
+      data = json.load(file)
+
+    for graph in data['graphs']:
+      for node in graph['nodes']:
+        node_id = node.get('id', '').split('/')[-1] if node.get('id') else ''
+        node_label = node.get('lbl', '')
+        node_def = node.get('meta', {}).get('definition', {}).get('val', '')
+        c = hpoCS.add_concept(code=node_id, display=node_label, definition=node_def)
+
+    with open(LOCAL_CODESYSTEM_FILE, 'w') as file:
+      # Save the processed CodeSystem to a file
+      print(f"Saving processed CodeSystem to {LOCAL_CODESYSTEM_FILE}...")
+      file.write(hpoCS.to_json())

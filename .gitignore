@@ -1,0 +1,7 @@
+/load-content/src/__pycache__
+/load-content/src/fhir/__pycache__
+/load-content/src/sources/__pycache__
+/load-content/src/utils/__pycache__
+.DS_Store
+/data/clinvar
+data/cytoband/Thesaurus.owl.txt
