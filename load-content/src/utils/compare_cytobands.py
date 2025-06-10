@@ -1,3 +1,8 @@
+
+# standalone script to compare cytoband data from NCI Thesaurus and UCSC
+# This script extracts cytoband data from NCI Thesaurus and compares it with UCSC cytoband data.
+# It outputs a CSV file with the comparison results.
+
 import re
 
 def extract_subclasses(input_file):
@@ -6,7 +11,8 @@ def extract_subclasses(input_file):
     
     Args:
         input_file: Path to source data file
-        output_file: Path to save extracted labels
+    Returns:
+        List of bands for classes that are subClassOf C13432
     """    
     labels = []
       # Define namespaces
@@ -50,7 +56,8 @@ def process_cytobands(input_file):
     
     Args:
         input_file: Path to source data file
-        output_file: Path to save processed data
+    Returns:
+        List of concatenated chromosome and band identifiers
     """
     processed_lines = []
     
