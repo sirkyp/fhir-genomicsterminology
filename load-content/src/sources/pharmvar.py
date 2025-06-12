@@ -1,8 +1,8 @@
 import requests
 import os
 import json
-from fhir.codesystem import FHIRCodeSystem
 import utils.utils as utils
+from fhir.resources.codesystem import CodeSystem, CodeSystemConcept, CodeSystemProperty
 
 # Configuration settings
 SOURCE_DATA_API_URL = "https://www.pharmvar.org/api-service/alleles?exclude-sub-alleles=false&include-reference-variants=true&include-retired-alleles=false&include-retired-reference-sequences=false"
@@ -36,14 +36,42 @@ class PharmVar:
             return
 
         print(f"Loading CodeSystem data from {SOURCE_CODESYSTEM_URL}...")
-        pvCS = FHIRCodeSystem()
-        pvCS.fetch_cs(url=SOURCE_CODESYSTEM_URL)
-        pvCS.add_property(code="geneSymbol", description="Gene Symbol", type=FHIRCodeSystem.PropertyType.STRING)
-        pvCS.add_property(code="function", description="Function", type=FHIRCodeSystem.PropertyType.STRING)
-        pvCS.add_property(code="evidenceLevel", description="Evidence Level", type=FHIRCodeSystem.PropertyType.STRING)
-        pvCS.add_property(code="url", description="URL", type=FHIRCodeSystem.PropertyType.STRING)
-        pvCS.add_property(code="alleleType", description="Allele Type", type=FHIRCodeSystem.PropertyType.STRING)
-        pvCS.add_property(code="hgvs", description="HGVS", type=FHIRCodeSystem.PropertyType.STRING)
+        pvCS = utils.new_CodeSystemFromURL(url=SOURCE_CODESYSTEM_URL)
+        
+        pvCS.content = 'complete'
+
+        pvCS.property = [
+            CodeSystemProperty(
+            code="geneSymbol",
+            description="Gene Symbol",
+            type='string'
+            ),
+            CodeSystemProperty(
+            code="function", 
+            description="Function",
+            type='string'
+            ),
+            CodeSystemProperty(
+            code="evidenceLevel",
+            description="Evidence Level", 
+            type='string'
+            ),
+            CodeSystemProperty(
+            code="url",
+            description="URL",
+            type='string'
+            ),
+            CodeSystemProperty(
+            code="alleleType",
+            description="Allele Type",
+            type='string'
+            ),
+            CodeSystemProperty(
+            code="hgvs",
+            description="HGVS",
+            type='string'
+            )
+        ]
 
         print(f"Processing data from {LOCAL_DATA_FILE}...")
         with open(LOCAL_DATA_FILE, 'r') as file:
@@ -51,13 +79,14 @@ class PharmVar:
 
         if data:
             for a in data:
-                c = pvCS.add_concept(code=a['pvId'], display=a['alleleName'], definition=a['description'])
-                for p in pvCS.property:
-                    c.add_property(code=p.code, value=a[p.code], type=p.type)
-
+                c = utils.new_CodeSystemConcept(system=pvCS, code=a['pvId'], display=a['alleleName'], definition=a['description'])
+                if c is not None:
+                    for p in pvCS.property:
+                        utils.new_CodeSystemConceptProperty(concept=c, code=p.code, type=p.type, value=a.get(p.code, ''))
+ 
             with open(LOCAL_CODESYSTEM_FILE, 'w') as file:
                 print(f"Saving processed CodeSystem to {LOCAL_CODESYSTEM_FILE}...")
-                file.write(pvCS.to_json())
-            
+                file.write(pvCS.json(indent=2))
+    
         else:
             print("No records found in the data file.")

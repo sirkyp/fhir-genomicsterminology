@@ -3,6 +3,100 @@ import time
 import requests
 import gzip
 import shutil
+from fhir.resources.codesystem import CodeSystem
+from fhir.resources.codesystem import CodeSystemConceptProperty
+from fhir.resources.codesystem import CodeSystemConcept
+
+def new_CodeSystemFromURL(url: str) -> CodeSystem:
+    """
+    Create a new CodeSystem from a URL.
+    
+    Args:
+        url: The URL to fetch the CodeSystem from
+    
+    Returns:
+        CodeSystem: A new CodeSystem instance
+    """
+    if url is None or len(url) == 0:
+        return None
+
+    # given a URL that resolves to a CodeSystem, fetch the data
+    try:
+        response = requests.get(url)
+        if response.status_code == 200:
+            code_system = CodeSystem.parse_obj(response.json())
+        else:
+            print(f"Failed to fetch CodeSystem from {url}. Status code: {response.status_code}")
+    except Exception as e:
+        print(f"Error fetching CodeSystem from {url}: {e}")
+
+    #since we are loading concepts, we can default adding the concept array to the object
+    code_system.concept = []
+
+    return code_system
+
+
+def new_CodeSystemConcept(system: CodeSystem, code: str, display: str = None, definition: str = None) -> CodeSystemConcept:
+    """
+    Create a new CodeSystemConcept with the given code and optional display.
+    
+    Args:
+        system: The CodeSystem to which the concept will be added
+        code: The code for the concept
+        display: Optional display name for the concept
+    
+    Returns:
+        CodeSystemConcept: A new CodeSystemConcept instance
+    """
+    if code is None or len(code) == 0:
+        return None
+
+    concept = CodeSystemConcept(code=code)
+    if display is not None and len(display) > 0:
+        concept.display = display
+
+    if definition is not None and len(definition) > 0:
+        concept.definition = definition
+
+    if not system.concept:
+        system.concept = []
+    system.concept.append(concept)
+
+    return concept
+
+
+def new_CodeSystemConceptProperty(concept: CodeSystemConcept, code: str, type: str, value: any) -> CodeSystemConceptProperty:
+    """
+    Set the appropriate value field on a CodeSystemConceptProperty based on type
+    """
+    if code is None or value is None or type is None:
+        return None
+
+    if len(code) == 0 or len(value) == 0 or len(type) == 0:
+        return None
+
+    if type == "string":
+        prop = CodeSystemConceptProperty(code=code, valueString=str(value))
+    elif type == "code":
+        prop = CodeSystemConceptProperty(code=code, valueCode=str(value))
+    elif type == "Coding":
+#        prop.valueCoding = value
+        raise NotImplementedError("Coding type is not implemented in this function.")
+    elif type == "boolean":
+        prop = CodeSystemConceptProperty(code=code, valueBoolean=bool(value))
+    elif type == "integer":
+        prop = CodeSystemConceptProperty(code=code, valueInteger=int(value))
+    elif type == "decimal":
+        prop = CodeSystemConceptProperty(code=code, valueDecimal=float(value))
+    elif type == "dateTime":
+        prop = CodeSystemConceptProperty(code=code, valueDateTime=value)
+
+    # ensure we have the property list on the concept, and add the property
+    if not concept.property:
+        concept.property = []
+    concept.property.append(prop)
+
+    return prop
 
 def is_file_fresh(filename: str, hours_old: int = 24) -> bool:
     """Check if a file exists and is newer than specified hours.

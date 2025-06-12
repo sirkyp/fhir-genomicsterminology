@@ -5,7 +5,7 @@
 
 import re
 
-def extract_subclasses(input_file):
+def process_ncit(input_file):
     """
     Extract labels of classes that are subClassOf C13432.
     
@@ -50,7 +50,7 @@ def extract_subclasses(input_file):
 
     return labels
 
-def process_cytobands(input_file):
+def process_ucsc(input_file):
     """
     Process cytoband data to create concatenated band identifiers.
     
@@ -82,18 +82,18 @@ def process_cytobands(input_file):
   
 if __name__ == "__main__":
     input_file = "data/cytoband/source_data.txt"
-    cytobands = process_cytobands(input_file)
+    ucsc_bands = process_ucsc(input_file)
     
     #may have to manually download Thesaurus.owl.txt from https://evs.nci.nih.gov/ftp1/Thesaurus/Thesaurus.owl.txt
     input_file = "data/cytoband/Thesaurus.owl.txt"
-    classes = extract_subclasses(input_file)
+    ncit_bands = process_ncit(input_file)
 
     combined = {}
-    for c in classes:
-        item = {'name': c, 'in_nci': True, 'in_ucsc': c in cytobands}
+    for c in ncit_bands:
+        item = {'name': c, 'in_nci': True, 'in_ucsc': c in ucsc_bands}
         combined[c] = item
         
-    for c in cytobands:
+    for c in ucsc_bands:
         if c not in combined:
             item = {'name': c, 'in_nci': False, 'in_ucsc': True}
             combined[c] = item

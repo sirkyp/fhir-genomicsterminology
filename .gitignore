@@ -5,3 +5,4 @@
 .DS_Store
 /data/clinvar
 data/cytoband/Thesaurus.owl.txt
+/.venv

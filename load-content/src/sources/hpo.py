@@ -2,7 +2,7 @@ import os
 import json
 
 import utils.utils as utils
-from fhir.codesystem import FHIRCodeSystem
+from fhir.resources.codesystem import CodeSystem, CodeSystemConcept, CodeSystemProperty
 
 SOURCE_DATA_FILE_URL = "https://github.com/obophenotype/human-phenotype-ontology/releases/download/v2025-05-06/hp-full.json"
 SOURCE_CODESYSTEM_URL = "https://terminology.hl7.org/CodeSystem-HPO.json"
@@ -40,8 +40,7 @@ class HPO:
       return
 
     print(f"Creating FHIR CodeSystem for HPO from {SOURCE_CODESYSTEM_URL}...")
-    hpoCS = FHIRCodeSystem()
-    hpoCS.fetch_cs(url=SOURCE_CODESYSTEM_URL)
+    hpoCS = utils.new_CodeSystemFromURL(url=SOURCE_CODESYSTEM_URL)
  
     data = {}
     print(f"Processing data from {LOCAL_DATA_FILE}...")
@@ -53,9 +52,9 @@ class HPO:
         node_id = node.get('id', '').split('/')[-1] if node.get('id') else ''
         node_label = node.get('lbl', '')
         node_def = node.get('meta', {}).get('definition', {}).get('val', '')
-        c = hpoCS.add_concept(code=node_id, display=node_label, definition=node_def)
+        utils.new_CodeSystemConcept(system=hpoCS, code=node_id, display=node_label, definition=node_def)
 
     with open(LOCAL_CODESYSTEM_FILE, 'w') as file:
       # Save the processed CodeSystem to a file
       print(f"Saving processed CodeSystem to {LOCAL_CODESYSTEM_FILE}...")
-      file.write(hpoCS.to_json())
+      file.write(hpoCS.json(indent=2))

@@ -2,7 +2,7 @@ import os
 import csv
 
 import utils.utils as utils
-from fhir.codesystem import FHIRCodeSystem
+from fhir.resources.codesystem import CodeSystem, CodeSystemConcept, CodeSystemProperty
 
 GENE_SOURCE_DATA_FILE_URL = "https://storage.googleapis.com/public-download-files/hgnc/tsv/tsv/hgnc_complete_set.txt"
 GENE_SOURCE_CODESYSTEM_URL = "https://terminology.hl7.org/CodeSystem-v3-hgnc.json"
@@ -62,26 +62,70 @@ class HGNC:
         # to create FHIR CodeSystem concepts.
         print(f"Download CodeSystem from {GENE_SOURCE_CODESYSTEM_URL}...")
 
-        hgncCS = FHIRCodeSystem()
-        hgncCS.fetch_cs(url=GENE_SOURCE_CODESYSTEM_URL)
-        hgncCS.add_property(code="locus_group", description="The group of genes that share a common locus", type=FHIRCodeSystem.PropertyType.STRING)
-        hgncCS.add_property(code="locus_type", description="The type of locus (e.g., protein coding, non-coding)", type=FHIRCodeSystem.PropertyType.STRING)
-        hgncCS.add_property(code="location", description="The chromosomal location of the gene", type=FHIRCodeSystem.PropertyType.STRING)
-        hgncCS.add_property(code="ensembl_gene_id", description="The Ensembl identifier for the gene", type=FHIRCodeSystem.PropertyType.STRING)
-        hgncCS.add_property(code="refseq_accession", description="The RefSeq accession number for the gene", type=FHIRCodeSystem.PropertyType.STRING)
+        hgncCS = utils.new_CodeSystemFromURL(url=GENE_SOURCE_CODESYSTEM_URL)
+
+        hgncCS.property = [
+            CodeSystemProperty(
+                code="locus_group",
+                description="The group of genes that share a common locus",
+                type='string'
+            ),
+            CodeSystemProperty(
+                code="locus_type", 
+                description="The type of locus (e.g., protein coding, non-coding)",
+                type='string'
+            ),
+            CodeSystemProperty(
+                code="location",
+                description="The chromosomal location of the gene",
+                type='string'
+            ),
+            CodeSystemProperty(
+                code="ensembl_gene_id",
+                description="The Ensembl identifier for the gene", 
+                type='string'
+            ),
+            CodeSystemProperty(
+                code="refseq_accession",
+                description="The RefSeq accession number for the gene",
+                type='string'
+            ),
+            CodeSystemProperty(
+                code="gene_group",
+                description="The gene group/family name",
+                type='string'
+            ),
+            CodeSystemProperty(
+                code="gene_group_id", 
+                description="The gene group/family ID",
+                type='string'
+            ),
+            CodeSystemProperty(
+                code="alias_symbol",
+                description="Alternative symbols used to refer to the gene",
+                type='string'
+            ),
+            CodeSystemProperty(
+                code="alias_name",
+                description="Alternative names used to refer to the gene",
+                type='string'
+            )
+        ]
  
         print(f"Processing data from {GENE_LOCAL_DATA_FILE}...")
         with open(GENE_LOCAL_DATA_FILE, 'r') as file:
             reader = csv.DictReader(file, delimiter='\t')
             for a in reader:
-                c = hgncCS.add_concept(code=a['hgnc_id'], display=a['symbol'], definition=a['name'])
-                for p in hgncCS.property:
-                    c.add_property(code=p.code, value=a[p.code], type=p.type)
+                c = utils.new_CodeSystemConcept(system=hgncCS, code=a['hgnc_id'], display=a['symbol'], definition=a['name'])
+                if c is not None:
+                    for p in hgncCS.property:
+                        # Add properties to the concept
+                        utils.new_CodeSystemConceptProperty(concept=c, code=p.code, type=p.type, value=a[p.code])
 
             with open(GENE_LOCAL_CODESYSTEM_FILE, 'w') as file:
                 # Save the processed CodeSystem to a file
                 print(f"Saving processed CodeSystem to {GENE_LOCAL_CODESYSTEM_FILE}...")
-                file.write(hgncCS.to_json())
+                file.write(hgncCS.json(indent=2))
 
     def process_gene_groups(self):
         """
@@ -96,20 +140,19 @@ class HGNC:
         # This method should read the HGNC gene group data file and process it
         # to create FHIR CodeSystem concepts.
         print(f"Download CodeSystem from {GENEGROUP_SOURCE_CODESYSTEM_URL}...")
-        hgncCS = FHIRCodeSystem()
-        hgncCS.fetch_cs(url=GENEGROUP_SOURCE_CODESYSTEM_URL)
- 
+        hgncCS = utils.new_CodeSystemFromURL(url=GENEGROUP_SOURCE_CODESYSTEM_URL)
+
         print(f"Processing data from {GENEGROUP_LOCAL_DATA_FILE}...")
         with open(GENEGROUP_LOCAL_DATA_FILE, 'r') as file:
             reader = csv.DictReader(file, delimiter=',', quotechar='"')
 
             for a in reader:
-                c = hgncCS.add_concept(code=a['id'], display=a['abbreviation'], definition=a['name'])
+                utils.new_CodeSystemConcept(system=hgncCS, code=a['id'], display=a['abbreviation'], definition=a['name'])
 
             with open(GENEGROUP_LOCAL_CODESYSTEM_FILE, 'w') as file:
                 # Save the processed CodeSystem to a file
                 print(f"Saving processed CodeSystem to {GENEGROUP_LOCAL_CODESYSTEM_FILE}...")
-                file.write(hgncCS.to_json())
+                file.write(hgncCS.json(indent=2))
     
     def process_data(self):
         """

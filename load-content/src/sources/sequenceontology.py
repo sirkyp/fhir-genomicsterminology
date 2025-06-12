@@ -1,8 +1,8 @@
 import os
 import json
-
 import utils.utils as utils
-from fhir.codesystem import FHIRCodeSystem
+
+from fhir.resources.codesystem import CodeSystem, CodeSystemConcept, CodeSystemProperty
 
 SOURCE_DATA_FILE_URL = "https://raw.githubusercontent.com/The-Sequence-Ontology/SO-Ontologies/refs/heads/master/Ontology_Files/so-simple.json"
 SOURCE_CODESYSTEM_URL = "https://terminology.hl7.org/CodeSystem-SO.json"
@@ -41,12 +41,13 @@ class SequenceOntology:
             return
 
         print(f"Creating FHIR CodeSystem for Sequence Ontology from {SOURCE_CODESYSTEM_URL}...")        
-        soCS = FHIRCodeSystem()
-        soCS.fetch_cs(url=SOURCE_CODESYSTEM_URL)
+        soCS = utils.new_CodeSystemFromURL(url=SOURCE_CODESYSTEM_URL)
         # Add properties specific to Sequence Ontology
-        # Note: You may need to adjust these properties based on your SO data structure
-        soCS.add_property(code="comments", type=FHIRCodeSystem.PropertyType.STRING, description="Comments about the concept")
- 
+        soCS.property = [CodeSystemProperty(
+            code="comments",
+            type='string',
+            description="Comments about the concept")]
+
         print(f"Processing data from {LOCAL_DATA_FILE}...")
         data = {}
         with open(LOCAL_DATA_FILE, 'r') as file:
@@ -57,15 +58,15 @@ class SequenceOntology:
                 node_id = node.get('id', '').split('/')[-1] if node.get('id') else ''
                 node_label = node.get('lbl', '')
                 node_def = node.get('meta', {}).get('definition', {}).get('val', '')
-                c = soCS.add_concept(code=node_id, display=node_label, definition=node_def)
-
-                # Add properties to the concept
-                # need special logic to handle comments
-                values = node.get('meta', {}).get('comments', [])
-                combined_value = '|'.join(values) if values else ''
-                c.add_property(code='comments', value=combined_value, type=FHIRCodeSystem.PropertyType.STRING)
+                c = utils.new_CodeSystemConcept(system=soCS, code=node_id, display=node_label, definition=node_def)
+                if c is not None:
+                    # Add properties to the concept
+                    # need special logic to handle comments
+                    values = node.get('meta', {}).get('comments', [])
+                    combined_value = '|'.join(values) if values else ''
+                    utils.new_CodeSystemConceptProperty(concept=c, code='comments', type='string', value=combined_value)
 
         with open(LOCAL_CODESYSTEM_FILE, 'w') as file:
             # Save the processed CodeSystem to a file
             print(f"Saving processed CodeSystem to {LOCAL_CODESYSTEM_FILE}...")
-            file.write(soCS.to_json())
+            file.write(soCS.json(indent=2))

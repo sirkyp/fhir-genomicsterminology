@@ -1,8 +1,7 @@
-import requests
 import os
 import csv
 import utils.utils as utils
-from fhir.codesystem import FHIRCodeSystem
+from fhir.resources.codesystem import CodeSystem, CodeSystemConcept, CodeSystemProperty
 
 SOURCE_DATA_FILE_URL = "https://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/variant_summary.txt.gz"
 SOURCE_CODESYSTEM_URL = "https://terminology.hl7.org/CodeSystem-ClinVarV.json"
@@ -45,11 +44,12 @@ class ClinVar:
       return
 
     print(f"Loading ClinVar CodeSystem from {SOURCE_CODESYSTEM_URL}...")
-    clinvarCS = FHIRCodeSystem()
-    clinvarCS.fetch_cs(url=SOURCE_CODESYSTEM_URL)
-    
-    clinvarCS.add_property(code="ClinicalSignificance", description="Clinical Significance",type=FHIRCodeSystem.PropertyType.STRING)
-    clinvarCS.add_property(code="ReviewStatus", description="Review Status", type=FHIRCodeSystem.PropertyType.STRING)
+    clinvarCS = utils.new_CodeSystemFromURL(SOURCE_CODESYSTEM_URL)
+
+    clinvarCS.property = [
+      CodeSystemProperty(code="ClinicalSignificance", description="Clinical Significance",type='string'),
+      CodeSystemProperty(code="GeneSymbol", description="Gene Symbol", type='string')
+    ]
 
     # Process the large TSV file in chunks
     chunk_size = 50000  # Adjust this based on your memory constraints
@@ -84,13 +84,11 @@ class ClinVar:
             # Process batch
             print('.', end='', flush=True)
             for item in batch:
-              c = clinvarCS.add_concept(
-                  code=item['code'],
-                  display=item['display'],
-                  definition=item['definition']
-                )
-              for p in clinvarCS.property: 
-                c.add_property(code=p.code, type=p.type, value=item['property'].get(p.code, ''))
+              concept = utils.new_CodeSystemConcept(system=clinvarCS, code=item['code'], display=item['display'], definition=item['definition'])
+              if concept is not None:
+                for p in clinvarCS.property: 
+                  utils.new_CodeSystemConceptProperty(concept=concept, code=p.code, type=p.type, value=item['property'].get(p.code, ''))
+
 
             processed_count += len(batch)
             batch = []
@@ -99,14 +97,11 @@ class ClinVar:
         if batch:
           print('.', end='', flush=True)
           for item in batch:
-            c = clinvarCS.add_concept(
-                code=item['code'],
-                display=item['display'],
-                definition=item['definition']
-              )
-            # Add properties to the concept
-            for p in clinvarCS.property: 
-              c.add_property(code=p.code, type=p.type, value=item['property'].get(p.code, ''))
+              concept = utils.new_CodeSystemConcept(system=clinvarCS, code=item['code'], display=item['display'], definition=item['definition'])
+              if concept is not None:
+                for p in clinvarCS.property: 
+                  utils.new_CodeSystemConceptProperty(concept=concept, code=p.code, type=p.type, value=item['property'].get(p.code, ''))
+
           processed_count += len(batch)
 
       print(f"Total records processed: {processed_count}")
@@ -114,7 +109,7 @@ class ClinVar:
       # Save the processed CodeSystem to a file
       with open(LOCAL_CODESYSTEM_FILE, 'w') as file:
         print(f"Saving processed CodeSystem to {LOCAL_CODESYSTEM_FILE}...")
-        file.write(clinvarCS.to_json())
+        file.write(clinvarCS.json(indent=2))
 
     except Exception as e:
       print(f"Error processing file: {str(e)}")
