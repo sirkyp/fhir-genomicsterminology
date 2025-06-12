@@ -12,14 +12,14 @@ def init():
 
 def main():
     sources = []
+    sources.append(HGNC())  # Create an instance of the HGNC class
+    sources.append(ClinVar())  # Create an instance of the ClinVar class
     sources.append(PharmVar())  # Create an instance of the PharmVar class
     sources.append(SequenceOntology())  # Create an instance of the SequenceOntology class
     sources.append(HPO())  # Create an instance of the HPO class
-    sources.append(ClinVar())  # Create an instance of the ClinVar class
     sources.append(Cytoband())  # Create an instance of the Cytoband class
     sources.append(RefSeq())  # Create an instance of the RefSeq class
-    sources.append(HGNC())  # Create an instance of the HGNC class
-
+ 
     for s in sources:
         s.load_data()
         s.process_data()

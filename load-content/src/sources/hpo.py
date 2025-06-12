@@ -1,4 +1,4 @@
-import os
+from pathlib import Path
 import json
 
 import utils.utils as utils
@@ -6,9 +6,9 @@ from fhir.resources.codesystem import CodeSystem, CodeSystemConcept, CodeSystemP
 
 SOURCE_DATA_FILE_URL = "https://github.com/obophenotype/human-phenotype-ontology/releases/download/v2025-05-06/hp-full.json"
 SOURCE_CODESYSTEM_URL = "https://terminology.hl7.org/CodeSystem-HPO.json"
-LOCAL_DATA_DIR = "./data/hpo"
-LOCAL_DATA_FILE = f"{LOCAL_DATA_DIR}/source_data.json"
-LOCAL_CODESYSTEM_FILE = f"{LOCAL_DATA_DIR}/codesystem.json"
+LOCAL_DATA_DIR = Path("./data/hpo")
+LOCAL_DATA_FILE = LOCAL_DATA_DIR / "source_data.json"
+LOCAL_CODESYSTEM_FILE = LOCAL_DATA_DIR / "codesystem.json"
 
 class HPO:
   def __init__(self):
@@ -16,7 +16,7 @@ class HPO:
     Initialize the HPO class.
     """
     # Ensure the data directory exists
-    os.makedirs(LOCAL_DATA_DIR, exist_ok=True)
+    LOCAL_DATA_DIR.mkdir(parents=True, exist_ok=True)
 
   def load_data(self):
     """
@@ -35,7 +35,7 @@ class HPO:
     """
     print("Processing HPO data")
   
-    if not os.path.exists(LOCAL_DATA_FILE):
+    if not LOCAL_DATA_FILE.exists():
       print("Data file does not exist. Please run the load_data function first.")
       return
 
@@ -44,7 +44,7 @@ class HPO:
  
     data = {}
     print(f"Processing data from {LOCAL_DATA_FILE}...")
-    with open(LOCAL_DATA_FILE, 'r') as file:
+    with LOCAL_DATA_FILE.open('r') as file:
       data = json.load(file)
 
     for graph in data['graphs']:
@@ -54,7 +54,6 @@ class HPO:
         node_def = node.get('meta', {}).get('definition', {}).get('val', '')
         utils.new_CodeSystemConcept(system=hpoCS, code=node_id, display=node_label, definition=node_def)
 
-    with open(LOCAL_CODESYSTEM_FILE, 'w') as file:
-      # Save the processed CodeSystem to a file
-      print(f"Saving processed CodeSystem to {LOCAL_CODESYSTEM_FILE}...")
-      file.write(hpoCS.json(indent=2))
+    # Save the processed CodeSystem to a file
+    print(f"Saving processed CodeSystem to {LOCAL_CODESYSTEM_FILE}...")
+    LOCAL_CODESYSTEM_FILE.write_text(hpoCS.model_dump_json(indent=2))

@@ -1,4 +1,4 @@
-import os
+from pathlib import Path
 import json
 import utils.utils as utils
 
@@ -6,9 +6,9 @@ from fhir.resources.codesystem import CodeSystem, CodeSystemConcept, CodeSystemP
 
 SOURCE_DATA_FILE_URL = "https://raw.githubusercontent.com/The-Sequence-Ontology/SO-Ontologies/refs/heads/master/Ontology_Files/so-simple.json"
 SOURCE_CODESYSTEM_URL = "https://terminology.hl7.org/CodeSystem-SO.json"
-LOCAL_DATA_DIR = "./data/so"
-LOCAL_DATA_FILE = f"{LOCAL_DATA_DIR}/source_data.json"
-LOCAL_CODESYSTEM_FILE = f"{LOCAL_DATA_DIR}/codesystem.json"
+LOCAL_DATA_DIR = Path("./data/so")
+LOCAL_DATA_FILE = LOCAL_DATA_DIR / "source_data.json"
+LOCAL_CODESYSTEM_FILE = LOCAL_DATA_DIR / "codesystem.json"
 
 class SequenceOntology:
     def __init__(self):
@@ -16,7 +16,7 @@ class SequenceOntology:
         Initialize the SequenceOntology class.
         """
         # Ensure the data directory exists
-        os.makedirs(LOCAL_DATA_DIR, exist_ok=True)
+        LOCAL_DATA_DIR.mkdir(parents=True, exist_ok=True)
 
     def load_data(self):
         """
@@ -36,7 +36,7 @@ class SequenceOntology:
         """
         print("Processing Sequence Ontology data...")
     
-        if not os.path.exists(LOCAL_DATA_FILE):
+        if not LOCAL_DATA_FILE.exists():
             print(f"{LOCAL_DATA_FILE} data file does not exist.")
             return
 
@@ -50,7 +50,7 @@ class SequenceOntology:
 
         print(f"Processing data from {LOCAL_DATA_FILE}...")
         data = {}
-        with open(LOCAL_DATA_FILE, 'r') as file:
+        with LOCAL_DATA_FILE.open('r') as file:
             data = json.load(file)
 
         for graph in data['graphs']:
@@ -66,7 +66,6 @@ class SequenceOntology:
                     combined_value = '|'.join(values) if values else ''
                     utils.new_CodeSystemConceptProperty(concept=c, code='comments', type='string', value=combined_value)
 
-        with open(LOCAL_CODESYSTEM_FILE, 'w') as file:
-            # Save the processed CodeSystem to a file
-            print(f"Saving processed CodeSystem to {LOCAL_CODESYSTEM_FILE}...")
-            file.write(soCS.json(indent=2))
+        # Save the processed CodeSystem to a file
+        print(f"Saving processed CodeSystem to {LOCAL_CODESYSTEM_FILE}...")
+        LOCAL_CODESYSTEM_FILE.write_text(soCS.model_dump_json(indent=2))

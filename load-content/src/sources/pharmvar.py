@@ -1,5 +1,4 @@
-import requests
-import os
+from pathlib import Path
 import json
 import utils.utils as utils
 from fhir.resources.codesystem import CodeSystem, CodeSystemConcept, CodeSystemProperty
@@ -7,14 +6,14 @@ from fhir.resources.codesystem import CodeSystem, CodeSystemConcept, CodeSystemP
 # Configuration settings
 SOURCE_DATA_API_URL = "https://www.pharmvar.org/api-service/alleles?exclude-sub-alleles=false&include-reference-variants=true&include-retired-alleles=false&include-retired-reference-sequences=false"
 SOURCE_CODESYSTEM_URL = 'https://terminology.hl7.org/CodeSystem-PharmVar.json'
-LOCAL_DATA_DIR = "./data/pharmvar"
-LOCAL_DATA_FILE = f"{LOCAL_DATA_DIR}/source_data.json"
-LOCAL_CODESYSTEM_FILE = f"{LOCAL_DATA_DIR}/codesystem.json"
+LOCAL_DATA_DIR = Path("./data/pharmvar")
+LOCAL_DATA_FILE = LOCAL_DATA_DIR / "source_data.json"
+LOCAL_CODESYSTEM_FILE = LOCAL_DATA_DIR / "codesystem.json"
 
 class PharmVar:
     def __init__(self):
         # Ensure the data directory exists
-        os.makedirs(LOCAL_DATA_DIR, exist_ok=True)
+        LOCAL_DATA_DIR.mkdir(parents=True, exist_ok=True)
 
     def load_data(self):
         """
@@ -31,7 +30,7 @@ class PharmVar:
         Process the PharmVar data and create FHIR CodeSystem concepts.
         """
         print("Processing PharmVar data...")
-        if not os.path.exists(LOCAL_DATA_FILE):
+        if not LOCAL_DATA_FILE.exists():
             print(f"{LOCAL_DATA_FILE} data file does not exist.")
             return
 
@@ -74,8 +73,7 @@ class PharmVar:
         ]
 
         print(f"Processing data from {LOCAL_DATA_FILE}...")
-        with open(LOCAL_DATA_FILE, 'r') as file:
-            data = json.load(file)
+        data = json.loads(LOCAL_DATA_FILE.read_text())
 
         if data:
             for a in data:
@@ -84,9 +82,8 @@ class PharmVar:
                     for p in pvCS.property:
                         utils.new_CodeSystemConceptProperty(concept=c, code=p.code, type=p.type, value=a.get(p.code, ''))
  
-            with open(LOCAL_CODESYSTEM_FILE, 'w') as file:
-                print(f"Saving processed CodeSystem to {LOCAL_CODESYSTEM_FILE}...")
-                file.write(pvCS.json(indent=2))
-    
+            print(f"Saving processed CodeSystem to {LOCAL_CODESYSTEM_FILE}...")
+            LOCAL_CODESYSTEM_FILE.write_text(pvCS.model_dump_json(indent=2))
+
         else:
             print("No records found in the data file.")

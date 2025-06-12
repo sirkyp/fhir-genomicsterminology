@@ -1,20 +1,20 @@
-import os
+from pathlib import Path
 import csv
 
 import utils.utils as utils
 from fhir.resources.codesystem import CodeSystem, CodeSystemConcept, CodeSystemProperty
 
+LOCAL_DATA_DIR = Path("./data/hgnc")
+
 GENE_SOURCE_DATA_FILE_URL = "https://storage.googleapis.com/public-download-files/hgnc/tsv/tsv/hgnc_complete_set.txt"
 GENE_SOURCE_CODESYSTEM_URL = "https://terminology.hl7.org/CodeSystem-v3-hgnc.json"
-GENE_LOCAL_DATA_DIR = "./data/hgnc"
-GENE_LOCAL_DATA_FILE = f"{GENE_LOCAL_DATA_DIR}/source_data.tsv"
-GENE_LOCAL_CODESYSTEM_FILE = f"{GENE_LOCAL_DATA_DIR}/codesystem.json"
+GENE_LOCAL_DATA_FILE = LOCAL_DATA_DIR / "source_data.tsv"
+GENE_LOCAL_CODESYSTEM_FILE = LOCAL_DATA_DIR / "codesystem.json"
 
 GENEGROUP_SOURCE_DATA_FILE_URL = "https://storage.googleapis.com/public-download-files/hgnc/csv/csv/genefamily_db_tables/family.csv"
 GENEGROUP_SOURCE_CODESYSTEM_URL = "https://terminology.hl7.org/CodeSystem-HGNCGeneGroup.json"
-GENEGROUP_LOCAL_DATA_DIR = "./data/hgnc"
-GENEGROUP_LOCAL_DATA_FILE = f"{GENEGROUP_LOCAL_DATA_DIR}/group_source_data.tsv"
-GENEGROUP_LOCAL_CODESYSTEM_FILE = f"{GENEGROUP_LOCAL_DATA_DIR}/group_codesystem.json"
+GENEGROUP_LOCAL_DATA_FILE = LOCAL_DATA_DIR / "group_source_data.tsv"
+GENEGROUP_LOCAL_CODESYSTEM_FILE = LOCAL_DATA_DIR / "group_codesystem.json"
 
 class HGNC:
     def __init__(self):
@@ -22,7 +22,7 @@ class HGNC:
         Initialize the HGNC class.
         """
         # Ensure the data directory exists
-        os.makedirs(GENE_LOCAL_DATA_DIR, exist_ok=True)
+        LOCAL_DATA_DIR.mkdir(parents=True, exist_ok=True)
 
     def load_genes(self):
         print("Loading HGNC gene data...")
@@ -54,7 +54,7 @@ class HGNC:
         """
         print("Processing HGNC gene data...")
 
-        if not os.path.exists(GENE_LOCAL_DATA_FILE):
+        if not GENE_LOCAL_DATA_FILE.exists():
             print(f"{GENE_LOCAL_DATA_FILE} data file does not exist.")
             return
 
@@ -113,8 +113,9 @@ class HGNC:
         ]
  
         print(f"Processing data from {GENE_LOCAL_DATA_FILE}...")
-        with open(GENE_LOCAL_DATA_FILE, 'r') as file:
+        with GENE_LOCAL_DATA_FILE.open('r') as file:
             reader = csv.DictReader(file, delimiter='\t')
+
             for a in reader:
                 c = utils.new_CodeSystemConcept(system=hgncCS, code=a['hgnc_id'], display=a['symbol'], definition=a['name'])
                 if c is not None:
@@ -122,10 +123,8 @@ class HGNC:
                         # Add properties to the concept
                         utils.new_CodeSystemConceptProperty(concept=c, code=p.code, type=p.type, value=a[p.code])
 
-            with open(GENE_LOCAL_CODESYSTEM_FILE, 'w') as file:
-                # Save the processed CodeSystem to a file
-                print(f"Saving processed CodeSystem to {GENE_LOCAL_CODESYSTEM_FILE}...")
-                file.write(hgncCS.json(indent=2))
+        print(f"Saving processed CodeSystem to {GENE_LOCAL_CODESYSTEM_FILE}...")
+        GENE_LOCAL_CODESYSTEM_FILE.write_text(hgncCS.model_dump_json(indent=2))
 
     def process_gene_groups(self):
         """
@@ -133,7 +132,7 @@ class HGNC:
         """
         print("Processing HGNC gene group data...")
 
-        if not os.path.exists(GENEGROUP_LOCAL_DATA_FILE):
+        if not GENEGROUP_LOCAL_DATA_FILE.exists():
             print(f"{GENEGROUP_LOCAL_DATA_FILE} data file does not exist.")
             return
 
@@ -143,16 +142,14 @@ class HGNC:
         hgncCS = utils.new_CodeSystemFromURL(url=GENEGROUP_SOURCE_CODESYSTEM_URL)
 
         print(f"Processing data from {GENEGROUP_LOCAL_DATA_FILE}...")
-        with open(GENEGROUP_LOCAL_DATA_FILE, 'r') as file:
+        with GENEGROUP_LOCAL_DATA_FILE.open('r') as file:
             reader = csv.DictReader(file, delimiter=',', quotechar='"')
 
             for a in reader:
                 utils.new_CodeSystemConcept(system=hgncCS, code=a['id'], display=a['abbreviation'], definition=a['name'])
 
-            with open(GENEGROUP_LOCAL_CODESYSTEM_FILE, 'w') as file:
-                # Save the processed CodeSystem to a file
-                print(f"Saving processed CodeSystem to {GENEGROUP_LOCAL_CODESYSTEM_FILE}...")
-                file.write(hgncCS.json(indent=2))
+        print(f"Saving processed CodeSystem to {GENEGROUP_LOCAL_CODESYSTEM_FILE}...")
+        GENEGROUP_LOCAL_CODESYSTEM_FILE.write_text(hgncCS.model_dump_json(indent=2))
     
     def process_data(self):
         """

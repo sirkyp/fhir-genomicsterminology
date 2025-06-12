@@ -1,4 +1,4 @@
-import os
+from pathlib import Path
 import csv
 
 import utils.utils as utils
@@ -8,9 +8,9 @@ from fhir.resources.codesystem import CodeSystem, CodeSystemConcept, CodeSystemP
 # The full RefSeq database can be found at the NCBI RefSeq website: https://www.ncbi.nlm.nih.gov/refseq/
 SOURCE_DATA_FILE_URL = "https://ftp.ncbi.nlm.nih.gov/refseq/MANE/MANE_human/release_1.4/MANE.GRCh38.v1.4.summary.txt.gz"
 SOURCE_CODESYSTEM_URL = "https://terminology.hl7.org/CodeSystem-v3-refSeq.json"
-LOCAL_DATA_DIR = "./data/refseq"
-LOCAL_DATA_FILE = f"{LOCAL_DATA_DIR}/source_data.txt"
-LOCAL_CODESYSTEM_FILE = f"{LOCAL_DATA_DIR}/codesystem.json"
+LOCAL_DATA_DIR = Path("./data/refseq")
+LOCAL_DATA_FILE = LOCAL_DATA_DIR / "source_data.txt"
+LOCAL_CODESYSTEM_FILE = LOCAL_DATA_DIR / "codesystem.json"
 
 class RefSeq:
   def __init__(self):
@@ -18,7 +18,7 @@ class RefSeq:
     Initialize the RefSeq class.
     """
     # Ensure the data directory exists
-    os.makedirs(LOCAL_DATA_DIR, exist_ok=True)
+    LOCAL_DATA_DIR.mkdir(parents=True, exist_ok=True)
 
   def load_data(self):
     """
@@ -37,8 +37,8 @@ class RefSeq:
     """
     print("Processing RefSeq data...")
 
-    if not os.path.exists(LOCAL_DATA_FILE):
-      print(f"{LOCAL_DATA_DIR} Data file does not exist.")
+    if not LOCAL_DATA_FILE.exists():
+      print(f"{LOCAL_DATA_FILE} Data file does not exist.")
       return
   
     print(f"Creating FHIR CodeSystem for RefSeq from {SOURCE_CODESYSTEM_URL}...")
@@ -84,7 +84,7 @@ class RefSeq:
     ]
   
     print(f"Processing data from {LOCAL_DATA_FILE}...")
-    with open(LOCAL_DATA_FILE, 'r') as file:
+    with LOCAL_DATA_FILE.open('r') as file:
       reader = csv.DictReader(file, delimiter="\t")
       for row in reader:
         # skip rows without a valid 'HGNC_ID'
@@ -96,6 +96,5 @@ class RefSeq:
               for p in refseqCS.property:
                 utils.new_CodeSystemConceptProperty(concept=concept, code=p.code, type=p.type, value=row[p.code])
 
-      with open(LOCAL_CODESYSTEM_FILE, 'w') as outfile:
-        print(f"Saving processed CodeSystem to {LOCAL_CODESYSTEM_FILE}...")
-        outfile.write(refseqCS.json(indent=2))
+    print(f"Saving processed CodeSystem to {LOCAL_CODESYSTEM_FILE}...")
+    LOCAL_CODESYSTEM_FILE.write_text(refseqCS.model_dump_json(indent=2))

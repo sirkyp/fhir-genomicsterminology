@@ -1,8 +1,8 @@
-import os
 import time
 import requests
 import gzip
 import shutil
+import pathlib
 from fhir.resources.codesystem import CodeSystem
 from fhir.resources.codesystem import CodeSystemConceptProperty
 from fhir.resources.codesystem import CodeSystemConcept
@@ -24,7 +24,7 @@ def new_CodeSystemFromURL(url: str) -> CodeSystem:
     try:
         response = requests.get(url)
         if response.status_code == 200:
-            code_system = CodeSystem.parse_obj(response.json())
+            code_system = CodeSystem.model_validate(response.json())
         else:
             print(f"Failed to fetch CodeSystem from {url}. Status code: {response.status_code}")
     except Exception as e:
@@ -108,8 +108,9 @@ def is_file_fresh(filename: str, hours_old: int = 24) -> bool:
     Returns:
         bool: True if file exists and is fresh, False otherwise
     """
-    if os.path.exists(filename):
-        file_age = time.time() - os.path.getmtime(filename)
+    path = pathlib.Path(filename)
+    if path.exists():
+        file_age = time.time() - path.stat().st_mtime
         if file_age < hours_old * 3600:  # Convert hours to seconds
             print(f"Data file already exists at {filename} and is less than {hours_old} hours old. Skipping data fetch.")
             return True
@@ -129,15 +130,14 @@ def download_file(url: str, local_path: str) -> None:
         zip = False
         if url.endswith('.gz'):
             zip = True
-            filename += '.gz'  # Append .gz if the URL indicates a gzipped file
-        with open(filename, 'wb') as f:
-            f.write(response.content)
+        path = pathlib.Path(filename)
+        path.write_bytes(response.content)
 
         if zip:
             # Decompress the file
-            with gzip.open(filename, 'rb') as f_in:
-                with open(local_path, 'wb') as f_out:
-                    shutil.copyfileobj(f_in, f_out)
+            with gzip.open(path, 'rb') as f_in:
+                target_path = pathlib.Path(local_path)
+                target_path.write_bytes(f_in.read())
 
         print(f"Downloaded {url} successfully.")
     else:

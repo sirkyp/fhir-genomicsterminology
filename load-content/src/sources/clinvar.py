@@ -1,13 +1,13 @@
-import os
+from pathlib import Path
 import csv
 import utils.utils as utils
 from fhir.resources.codesystem import CodeSystem, CodeSystemConcept, CodeSystemProperty
 
 SOURCE_DATA_FILE_URL = "https://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/variant_summary.txt.gz"
 SOURCE_CODESYSTEM_URL = "https://terminology.hl7.org/CodeSystem-ClinVarV.json"
-LOCAL_DATA_DIR = "./data/clinvar"
-LOCAL_DATA_FILE = f"{LOCAL_DATA_DIR}/variant_summary.txt"
-LOCAL_CODESYSTEM_FILE = f"{LOCAL_DATA_DIR}/codesystem.json"
+LOCAL_DATA_DIR = Path("./data/clinvar")
+LOCAL_DATA_FILE = LOCAL_DATA_DIR / "variant_summary.txt"
+LOCAL_CODESYSTEM_FILE = LOCAL_DATA_DIR / "codesystem.json"
 
 class ClinVar:
   def __init__(self):
@@ -15,7 +15,7 @@ class ClinVar:
     Initialize the ClinVar class.
     """
     # Ensure the data directory exists
-    os.makedirs(LOCAL_DATA_DIR, exist_ok=True)
+    LOCAL_DATA_DIR.mkdir(parents=True, exist_ok=True)
 
   def load_data(self):
     """
@@ -35,7 +35,7 @@ class ClinVar:
     """
     print("Processing ClinVar data file...")
 
-    if not os.path.exists(LOCAL_DATA_FILE):
+    if not LOCAL_DATA_FILE.exists():
       print(f"ERROR: {LOCAL_DATA_FILE} data file does not exist. Please ensure the file is present.")
       return
 
@@ -57,7 +57,7 @@ class ClinVar:
 
     try:
       print(f"Processing data from {LOCAL_DATA_FILE}...")
-      with open(LOCAL_DATA_FILE, 'r') as file:
+      with LOCAL_DATA_FILE.open('r') as file:
         # tab-separated file with headers
         csv_reader = csv.DictReader(file, delimiter='\t')
         
@@ -73,6 +73,7 @@ class ClinVar:
             props = {}
             for p in clinvarCS.property:
               props[p.code] = row.get(p.code, '')
+
             batch.append({
               'code': code,
               'display': display,
@@ -89,7 +90,6 @@ class ClinVar:
                 for p in clinvarCS.property: 
                   utils.new_CodeSystemConceptProperty(concept=concept, code=p.code, type=p.type, value=item['property'].get(p.code, ''))
 
-
             processed_count += len(batch)
             batch = []
 
@@ -105,11 +105,10 @@ class ClinVar:
           processed_count += len(batch)
 
       print(f"Total records processed: {processed_count}")
-      
+  
       # Save the processed CodeSystem to a file
-      with open(LOCAL_CODESYSTEM_FILE, 'w') as file:
-        print(f"Saving processed CodeSystem to {LOCAL_CODESYSTEM_FILE}...")
-        file.write(clinvarCS.json(indent=2))
+      print(f"Saving processed CodeSystem to {LOCAL_CODESYSTEM_FILE}...")
+      LOCAL_CODESYSTEM_FILE.write_text(clinvarCS.model_dump_json(indent=2))
 
     except Exception as e:
       print(f"Error processing file: {str(e)}")
