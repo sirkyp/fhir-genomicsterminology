@@ -31,3 +31,8 @@ To run the application, execute the main script:
 ```
 python src/main.py
 ```
+
+## Data
+During the process, source data for each terminology is downloaded to the `data` folder. The processing may skip downloading of data depending on the source and freshness of the files.
+The terminology resources (CodeSystem, ValueSet) are the created in the same folder as the source data.
+Some of the files (input and output) are larger than the default allowed by GitHub, and are not in the repo by default. Running the application locally will download and create terminology files as needed.
