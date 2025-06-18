@@ -1,7 +1,7 @@
 # fhir-genomicsterminology
 
 ## Overview
-This project is for creating some FHIR terminology resources for genomic terminologies. Here is a description of the resources and where the original content comes from:
+This project is for creating FHIR terminology resources for genomic terminologies. Here is a description of the resources and where the original content comes from:
 * HGCN (Genes and GeneGroups)
   - [https://www.genenames.org/download/]
 * ClinVar
