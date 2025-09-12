@@ -1,9 +1,9 @@
 {
   "resourceType": "CodeSystem",
   "url": "http://example.org/fhir/CodeSystem/human-cytoband-agnostic",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "name": "HumanCytogeneticBandsAssemblyAgnostic",
-  "title": "Human Cytogenetic Bands (Assembly-agnostic: Chromosome \u2192 Arm \u2192 Region \u2192 Band \u2192 Subband; with sibling prev/next links)",
+  "title": "Human Cytogenetic Bands (Assembly-agnostic with prev/next)",
   "status": "active",
   "content": "complete",
   "caseSensitive": true,
@@ -1060,6 +1060,14 @@
                         "code": "1p12",
                         "display": "1p12"
                       }
+                    },
+                    {
+                      "code": "next",
+                      "valueCoding": {
+                        "system": "http://example.org/fhir/CodeSystem/human-cytoband-agnostic",
+                        "code": "1q11",
+                        "display": "1q11"
+                      }
                     }
                   ],
                   "concept": [
@@ -1157,6 +1165,14 @@
                         "system": "http://example.org/fhir/CodeSystem/human-cytoband-agnostic",
                         "code": "1q12",
                         "display": "1q12"
+                      }
+                    },
+                    {
+                      "code": "prev",
+                      "valueCoding": {
+                        "system": "http://example.org/fhir/CodeSystem/human-cytoband-agnostic",
+                        "code": "1p11",
+                        "display": "1p11"
                       }
                     }
                   ],
@@ -2767,6 +2783,14 @@
                         "code": "2p12",
                         "display": "2p12"
                       }
+                    },
+                    {
+                      "code": "next",
+                      "valueCoding": {
+                        "system": "http://example.org/fhir/CodeSystem/human-cytoband-agnostic",
+                        "code": "2q11",
+                        "display": "2q11"
+                      }
                     }
                   ],
                   "concept": [
@@ -2864,6 +2888,14 @@
                         "system": "http://example.org/fhir/CodeSystem/human-cytoband-agnostic",
                         "code": "2q12",
                         "display": "2q12"
+                      }
+                    },
+                    {
+                      "code": "prev",
+                      "valueCoding": {
+                        "system": "http://example.org/fhir/CodeSystem/human-cytoband-agnostic",
+                        "code": "2p11",
+                        "display": "2p11"
                       }
                     }
                   ],
@@ -4858,6 +4890,14 @@
                         "code": "3p12",
                         "display": "3p12"
                       }
+                    },
+                    {
+                      "code": "next",
+                      "valueCoding": {
+                        "system": "http://example.org/fhir/CodeSystem/human-cytoband-agnostic",
+                        "code": "3q11",
+                        "display": "3q11"
+                      }
                     }
                   ],
                   "concept": [
@@ -4955,6 +4995,14 @@
                         "system": "http://example.org/fhir/CodeSystem/human-cytoband-agnostic",
                         "code": "3q12",
                         "display": "3q12"
+                      }
+                    },
+                    {
+                      "code": "prev",
+                      "valueCoding": {
+                        "system": "http://example.org/fhir/CodeSystem/human-cytoband-agnostic",
+                        "code": "3p11",
+                        "display": "3p11"
                       }
                     }
                   ],
@@ -6358,6 +6406,14 @@
                         "code": "4p12",
                         "display": "4p12"
                       }
+                    },
+                    {
+                      "code": "next",
+                      "valueCoding": {
+                        "system": "http://example.org/fhir/CodeSystem/human-cytoband-agnostic",
+                        "code": "4q11",
+                        "display": "4q11"
+                      }
                     }
                   ],
                   "concept": []
@@ -6416,6 +6472,14 @@
                         "system": "http://example.org/fhir/CodeSystem/human-cytoband-agnostic",
                         "code": "4q12",
                         "display": "4q12"
+                      }
+                    },
+                    {
+                      "code": "prev",
+                      "valueCoding": {
+                        "system": "http://example.org/fhir/CodeSystem/human-cytoband-agnostic",
+                        "code": "4p11",
+                        "display": "4p11"
                       }
                     }
                   ],
@@ -7870,6 +7934,14 @@
                         "code": "5p12",
                         "display": "5p12"
                       }
+                    },
+                    {
+                      "code": "next",
+                      "valueCoding": {
+                        "system": "http://example.org/fhir/CodeSystem/human-cytoband-agnostic",
+                        "code": "5q11",
+                        "display": "5q11"
+                      }
                     }
                   ],
                   "concept": []
@@ -7928,6 +8000,14 @@
                         "system": "http://example.org/fhir/CodeSystem/human-cytoband-agnostic",
                         "code": "5q12",
                         "display": "5q12"
+                      }
+                    },
+                    {
+                      "code": "prev",
+                      "valueCoding": {
+                        "system": "http://example.org/fhir/CodeSystem/human-cytoband-agnostic",
+                        "code": "5p11",
+                        "display": "5p11"
                       }
                     }
                   ],
@@ -9523,6 +9603,14 @@
                         "code": "6p12",
                         "display": "6p12"
                       }
+                    },
+                    {
+                      "code": "next",
+                      "valueCoding": {
+                        "system": "http://example.org/fhir/CodeSystem/human-cytoband-agnostic",
+                        "code": "6q11",
+                        "display": "6q11"
+                      }
                     }
                   ],
                   "concept": [
@@ -9620,6 +9708,14 @@
                         "system": "http://example.org/fhir/CodeSystem/human-cytoband-agnostic",
                         "code": "6q12",
                         "display": "6q12"
+                      }
+                    },
+                    {
+                      "code": "prev",
+                      "valueCoding": {
+                        "system": "http://example.org/fhir/CodeSystem/human-cytoband-agnostic",
+                        "code": "6p11",
+                        "display": "6p11"
                       }
                     }
                   ],
@@ -11005,6 +11101,14 @@
                         "code": "7p12",
                         "display": "7p12"
                       }
+                    },
+                    {
+                      "code": "next",
+                      "valueCoding": {
+                        "system": "http://example.org/fhir/CodeSystem/human-cytoband-agnostic",
+                        "code": "7q11",
+                        "display": "7q11"
+                      }
                     }
                   ],
                   "concept": [
@@ -11095,6 +11199,14 @@
                     {
                       "code": "kind",
                       "valueCode": "band"
+                    },
+                    {
+                      "code": "prev",
+                      "valueCoding": {
+                        "system": "http://example.org/fhir/CodeSystem/human-cytoband-agnostic",
+                        "code": "7p11",
+                        "display": "7p11"
+                      }
                     }
                   ],
                   "concept": [
@@ -12181,6 +12293,14 @@
                         "code": "8p12",
                         "display": "8p12"
                       }
+                    },
+                    {
+                      "code": "next",
+                      "valueCoding": {
+                        "system": "http://example.org/fhir/CodeSystem/human-cytoband-agnostic",
+                        "code": "8q11",
+                        "display": "8q11"
+                      }
                     }
                   ],
                   "concept": [
@@ -12332,6 +12452,14 @@
                         "system": "http://example.org/fhir/CodeSystem/human-cytoband-agnostic",
                         "code": "8q12",
                         "display": "8q12"
+                      }
+                    },
+                    {
+                      "code": "prev",
+                      "valueCoding": {
+                        "system": "http://example.org/fhir/CodeSystem/human-cytoband-agnostic",
+                        "code": "8p11",
+                        "display": "8p11"
                       }
                     }
                   ],
@@ -13651,6 +13779,14 @@
                         "code": "9p12",
                         "display": "9p12"
                       }
+                    },
+                    {
+                      "code": "next",
+                      "valueCoding": {
+                        "system": "http://example.org/fhir/CodeSystem/human-cytoband-agnostic",
+                        "code": "9q11",
+                        "display": "9q11"
+                      }
                     }
                   ],
                   "concept": [
@@ -13748,6 +13884,14 @@
                         "system": "http://example.org/fhir/CodeSystem/human-cytoband-agnostic",
                         "code": "9q12",
                         "display": "9q12"
+                      }
+                    },
+                    {
+                      "code": "prev",
+                      "valueCoding": {
+                        "system": "http://example.org/fhir/CodeSystem/human-cytoband-agnostic",
+                        "code": "9p11",
+                        "display": "9p11"
                       }
                     }
                   ],
@@ -14884,6 +15028,14 @@
                         "code": "10p12",
                         "display": "10p12"
                       }
+                    },
+                    {
+                      "code": "next",
+                      "valueCoding": {
+                        "system": "http://example.org/fhir/CodeSystem/human-cytoband-agnostic",
+                        "code": "10q11",
+                        "display": "10q11"
+                      }
                     }
                   ],
                   "concept": [
@@ -15028,6 +15180,14 @@
                     {
                       "code": "kind",
                       "valueCode": "band"
+                    },
+                    {
+                      "code": "prev",
+                      "valueCoding": {
+                        "system": "http://example.org/fhir/CodeSystem/human-cytoband-agnostic",
+                        "code": "10p11",
+                        "display": "10p11"
+                      }
                     }
                   ],
                   "concept": [
@@ -16210,6 +16370,14 @@
                         "code": "11p12",
                         "display": "11p12"
                       }
+                    },
+                    {
+                      "code": "next",
+                      "valueCoding": {
+                        "system": "http://example.org/fhir/CodeSystem/human-cytoband-agnostic",
+                        "code": "11q11",
+                        "display": "11q11"
+                      }
                     }
                   ],
                   "concept": [
@@ -16334,6 +16502,14 @@
                         "system": "http://example.org/fhir/CodeSystem/human-cytoband-agnostic",
                         "code": "11q12",
                         "display": "11q12"
+                      }
+                    },
+                    {
+                      "code": "prev",
+                      "valueCoding": {
+                        "system": "http://example.org/fhir/CodeSystem/human-cytoband-agnostic",
+                        "code": "11p11",
+                        "display": "11p11"
                       }
                     }
                   ],
@@ -17308,6 +17484,14 @@
                         "code": "12p12",
                         "display": "12p12"
                       }
+                    },
+                    {
+                      "code": "next",
+                      "valueCoding": {
+                        "system": "http://example.org/fhir/CodeSystem/human-cytoband-agnostic",
+                        "code": "12q11",
+                        "display": "12q11"
+                      }
                     }
                   ],
                   "concept": [
@@ -17459,6 +17643,14 @@
                         "system": "http://example.org/fhir/CodeSystem/human-cytoband-agnostic",
                         "code": "12q12",
                         "display": "12q12"
+                      }
+                    },
+                    {
+                      "code": "prev",
+                      "valueCoding": {
+                        "system": "http://example.org/fhir/CodeSystem/human-cytoband-agnostic",
+                        "code": "12p11",
+                        "display": "12p11"
                       }
                     }
                   ],
@@ -18397,6 +18589,14 @@
                         "code": "13p12",
                         "display": "13p12"
                       }
+                    },
+                    {
+                      "code": "next",
+                      "valueCoding": {
+                        "system": "http://example.org/fhir/CodeSystem/human-cytoband-agnostic",
+                        "code": "13q11",
+                        "display": "13q11"
+                      }
                     }
                   ],
                   "concept": [
@@ -18494,6 +18694,14 @@
                         "system": "http://example.org/fhir/CodeSystem/human-cytoband-agnostic",
                         "code": "13q12",
                         "display": "13q12"
+                      }
+                    },
+                    {
+                      "code": "prev",
+                      "valueCoding": {
+                        "system": "http://example.org/fhir/CodeSystem/human-cytoband-agnostic",
+                        "code": "13p11",
+                        "display": "13p11"
                       }
                     }
                   ],
@@ -19561,6 +19769,14 @@
                         "code": "14p12",
                         "display": "14p12"
                       }
+                    },
+                    {
+                      "code": "next",
+                      "valueCoding": {
+                        "system": "http://example.org/fhir/CodeSystem/human-cytoband-agnostic",
+                        "code": "14q11",
+                        "display": "14q11"
+                      }
                     }
                   ],
                   "concept": [
@@ -19658,6 +19874,14 @@
                         "system": "http://example.org/fhir/CodeSystem/human-cytoband-agnostic",
                         "code": "14q12",
                         "display": "14q12"
+                      }
+                    },
+                    {
+                      "code": "prev",
+                      "valueCoding": {
+                        "system": "http://example.org/fhir/CodeSystem/human-cytoband-agnostic",
+                        "code": "14p11",
+                        "display": "14p11"
                       }
                     }
                   ],
@@ -20617,6 +20841,14 @@
                         "code": "15p12",
                         "display": "15p12"
                       }
+                    },
+                    {
+                      "code": "next",
+                      "valueCoding": {
+                        "system": "http://example.org/fhir/CodeSystem/human-cytoband-agnostic",
+                        "code": "15q11",
+                        "display": "15q11"
+                      }
                     }
                   ],
                   "concept": [
@@ -20714,6 +20946,14 @@
                         "system": "http://example.org/fhir/CodeSystem/human-cytoband-agnostic",
                         "code": "15q12",
                         "display": "15q12"
+                      }
+                    },
+                    {
+                      "code": "prev",
+                      "valueCoding": {
+                        "system": "http://example.org/fhir/CodeSystem/human-cytoband-agnostic",
+                        "code": "15p11",
+                        "display": "15p11"
                       }
                     }
                   ],
@@ -21847,6 +22087,14 @@
                         "code": "16p12",
                         "display": "16p12"
                       }
+                    },
+                    {
+                      "code": "next",
+                      "valueCoding": {
+                        "system": "http://example.org/fhir/CodeSystem/human-cytoband-agnostic",
+                        "code": "16q11",
+                        "display": "16q11"
+                      }
                     }
                   ],
                   "concept": [
@@ -21944,6 +22192,14 @@
                         "system": "http://example.org/fhir/CodeSystem/human-cytoband-agnostic",
                         "code": "16q12",
                         "display": "16q12"
+                      }
+                    },
+                    {
+                      "code": "prev",
+                      "valueCoding": {
+                        "system": "http://example.org/fhir/CodeSystem/human-cytoband-agnostic",
+                        "code": "16p11",
+                        "display": "16p11"
                       }
                     }
                   ],
@@ -22570,6 +22826,14 @@
                         "code": "17p12",
                         "display": "17p12"
                       }
+                    },
+                    {
+                      "code": "next",
+                      "valueCoding": {
+                        "system": "http://example.org/fhir/CodeSystem/human-cytoband-agnostic",
+                        "code": "17q11",
+                        "display": "17q11"
+                      }
                     }
                   ],
                   "concept": [
@@ -22667,6 +22931,14 @@
                         "system": "http://example.org/fhir/CodeSystem/human-cytoband-agnostic",
                         "code": "17q12",
                         "display": "17q12"
+                      }
+                    },
+                    {
+                      "code": "prev",
+                      "valueCoding": {
+                        "system": "http://example.org/fhir/CodeSystem/human-cytoband-agnostic",
+                        "code": "17p11",
+                        "display": "17p11"
                       }
                     }
                   ],
@@ -23254,6 +23526,14 @@
                     {
                       "code": "kind",
                       "valueCode": "band"
+                    },
+                    {
+                      "code": "next",
+                      "valueCoding": {
+                        "system": "http://example.org/fhir/CodeSystem/human-cytoband-agnostic",
+                        "code": "18q11",
+                        "display": "18q11"
+                      }
                     }
                   ],
                   "concept": [
@@ -23459,6 +23739,14 @@
                         "system": "http://example.org/fhir/CodeSystem/human-cytoband-agnostic",
                         "code": "18q12",
                         "display": "18q12"
+                      }
+                    },
+                    {
+                      "code": "prev",
+                      "valueCoding": {
+                        "system": "http://example.org/fhir/CodeSystem/human-cytoband-agnostic",
+                        "code": "18p11",
+                        "display": "18p11"
                       }
                     }
                   ],
@@ -24100,6 +24388,14 @@
                         "code": "19p12",
                         "display": "19p12"
                       }
+                    },
+                    {
+                      "code": "next",
+                      "valueCoding": {
+                        "system": "http://example.org/fhir/CodeSystem/human-cytoband-agnostic",
+                        "code": "19q11",
+                        "display": "19q11"
+                      }
                     }
                   ],
                   "concept": []
@@ -24150,6 +24446,14 @@
                         "system": "http://example.org/fhir/CodeSystem/human-cytoband-agnostic",
                         "code": "19q12",
                         "display": "19q12"
+                      }
+                    },
+                    {
+                      "code": "prev",
+                      "valueCoding": {
+                        "system": "http://example.org/fhir/CodeSystem/human-cytoband-agnostic",
+                        "code": "19p11",
+                        "display": "19p11"
                       }
                     }
                   ],
@@ -24643,6 +24947,14 @@
                         "code": "20p12",
                         "display": "20p12"
                       }
+                    },
+                    {
+                      "code": "next",
+                      "valueCoding": {
+                        "system": "http://example.org/fhir/CodeSystem/human-cytoband-agnostic",
+                        "code": "20q11",
+                        "display": "20q11"
+                      }
                     }
                   ],
                   "concept": [
@@ -24786,6 +25098,14 @@
                         "system": "http://example.org/fhir/CodeSystem/human-cytoband-agnostic",
                         "code": "20q12",
                         "display": "20q12"
+                      }
+                    },
+                    {
+                      "code": "prev",
+                      "valueCoding": {
+                        "system": "http://example.org/fhir/CodeSystem/human-cytoband-agnostic",
+                        "code": "20p11",
+                        "display": "20p11"
                       }
                     }
                   ],
@@ -25225,6 +25545,14 @@
                         "code": "21p12",
                         "display": "21p12"
                       }
+                    },
+                    {
+                      "code": "next",
+                      "valueCoding": {
+                        "system": "http://example.org/fhir/CodeSystem/human-cytoband-agnostic",
+                        "code": "21q11",
+                        "display": "21q11"
+                      }
                     }
                   ],
                   "concept": [
@@ -25315,6 +25643,14 @@
                     {
                       "code": "kind",
                       "valueCode": "band"
+                    },
+                    {
+                      "code": "prev",
+                      "valueCoding": {
+                        "system": "http://example.org/fhir/CodeSystem/human-cytoband-agnostic",
+                        "code": "21p11",
+                        "display": "21p11"
+                      }
                     }
                   ],
                   "concept": [
@@ -25723,6 +26059,14 @@
                         "code": "22p12",
                         "display": "22p12"
                       }
+                    },
+                    {
+                      "code": "next",
+                      "valueCoding": {
+                        "system": "http://example.org/fhir/CodeSystem/human-cytoband-agnostic",
+                        "code": "22q11",
+                        "display": "22q11"
+                      }
                     }
                   ],
                   "concept": [
@@ -25812,6 +26156,14 @@
                         "system": "http://example.org/fhir/CodeSystem/human-cytoband-agnostic",
                         "code": "22q12",
                         "display": "22q12"
+                      }
+                    },
+                    {
+                      "code": "prev",
+                      "valueCoding": {
+                        "system": "http://example.org/fhir/CodeSystem/human-cytoband-agnostic",
+                        "code": "22p11",
+                        "display": "22p11"
                       }
                     }
                   ],
@@ -26515,6 +26867,14 @@
                     {
                       "code": "kind",
                       "valueCode": "band"
+                    },
+                    {
+                      "code": "next",
+                      "valueCoding": {
+                        "system": "http://example.org/fhir/CodeSystem/human-cytoband-agnostic",
+                        "code": "Xq11",
+                        "display": "Xq11"
+                      }
                     }
                   ],
                   "concept": [
@@ -26720,6 +27080,14 @@
                         "system": "http://example.org/fhir/CodeSystem/human-cytoband-agnostic",
                         "code": "Xq12",
                         "display": "Xq12"
+                      }
+                    },
+                    {
+                      "code": "prev",
+                      "valueCoding": {
+                        "system": "http://example.org/fhir/CodeSystem/human-cytoband-agnostic",
+                        "code": "Xp11",
+                        "display": "Xp11"
                       }
                     }
                   ],
@@ -27473,6 +27841,14 @@
                     {
                       "code": "kind",
                       "valueCode": "band"
+                    },
+                    {
+                      "code": "next",
+                      "valueCoding": {
+                        "system": "http://example.org/fhir/CodeSystem/human-cytoband-agnostic",
+                        "code": "Yq11",
+                        "display": "Yq11"
+                      }
                     }
                   ],
                   "concept": [
@@ -27616,6 +27992,14 @@
                         "system": "http://example.org/fhir/CodeSystem/human-cytoband-agnostic",
                         "code": "Yq12",
                         "display": "Yq12"
+                      }
+                    },
+                    {
+                      "code": "prev",
+                      "valueCoding": {
+                        "system": "http://example.org/fhir/CodeSystem/human-cytoband-agnostic",
+                        "code": "Yp11",
+                        "display": "Yp11"
                       }
                     }
                   ],
