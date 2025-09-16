@@ -3,7 +3,7 @@
   "id": "HGNCGeneGroup",
   "text": {
     "status": "generated",
-    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p class=\"res-header-id\"><b>Generated Narrative: CodeSystem HGNCGeneGroup</b></p><a name=\"HGNCGeneGroup\"> </a><a name=\"hcHGNCGeneGroup\"> </a><a name=\"HGNCGeneGroup-en-US\"> </a><p>This case-sensitive code system <code>http://www.genenames.org/genegroup</code> defines codes, but no codes are represented here</p></div>"
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p class=\"res-header-id\"><b>Generated Narrative: CodeSystem HGNCGeneGroup</b></p><a name=\"HGNCGeneGroup\"> </a><a name=\"hcHGNCGeneGroup\"> </a><p>This case-sensitive code system <code>http://www.genenames.org/genegroup</code> defines codes, but no codes are represented here</p></div>"
   },
   "url": "http://www.genenames.org/genegroup",
   "version": "1.1.0",

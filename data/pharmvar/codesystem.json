@@ -3,7 +3,7 @@
   "id": "PharmVar",
   "text": {
     "status": "generated",
-    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p class=\"res-header-id\"><b>Generated Narrative: CodeSystem PharmVar</b></p><a name=\"PharmVar\"> </a><a name=\"hcPharmVar\"> </a><a name=\"PharmVar-en-US\"> </a><p>This case-sensitive code system <code>http://www.pharmvar.org</code> defines codes, but no codes are represented here</p></div>"
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p class=\"res-header-id\"><b>Generated Narrative: CodeSystem PharmVar</b></p><a name=\"PharmVar\"> </a><a name=\"hcPharmVar\"> </a><p>This case-sensitive code system <code>http://www.pharmvar.org</code> defines codes, but no codes are represented here</p></div>"
   },
   "url": "http://www.pharmvar.org",
   "version": "1.0.0",

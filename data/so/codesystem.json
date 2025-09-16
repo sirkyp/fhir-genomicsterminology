@@ -3,7 +3,7 @@
   "id": "SO",
   "text": {
     "status": "generated",
-    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p class=\"res-header-id\"><b>Generated Narrative: CodeSystem SO</b></p><a name=\"SO\"> </a><a name=\"hcSO\"> </a><a name=\"SO-en-US\"> </a><p>This case-sensitive code system <code>http://www.sequenceontology.org</code> defines codes, but no codes are represented here</p></div>"
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p class=\"res-header-id\"><b>Generated Narrative: CodeSystem SO</b></p><a name=\"SO\"> </a><a name=\"hcSO\"> </a><p>This case-sensitive code system <code>http://www.sequenceontology.org</code> defines codes, but no codes are represented here</p></div>"
   },
   "url": "http://www.sequenceontology.org",
   "version": "1.0.0",
